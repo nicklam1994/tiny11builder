@@ -650,26 +650,21 @@ class App(ctk.CTk):
 
 
 def main():
+    print("[1/4] 啟動中...")
     try:
+        print("[2/4] 初始化 CustomTkinter...")
         app = App()
+        print("[3/4] 窗口創建成功，進入事件循環...")
         app.mainloop()
+        print("[4/4] 事件循環結束")
     except Exception as e:
         import traceback
         error_msg = traceback.format_exc()
-        # Try to show in message box
-        try:
-            import tkinter as tk
-            from tkinter import messagebox
-            root = tk.Tk()
-            root.withdraw()
-            messagebox.showerror("tiny11 Builder 錯誤", error_msg)
-            root.destroy()
-        except Exception:
-            # Fallback: write to file and print
-            error_file = Path(__file__).parent / "error.log"
-            error_file.write_text(error_msg, encoding="utf-8")
-            print(error_msg, file=sys.stderr)
-            print(f"\n錯誤已記錄至：{error_file}", file=sys.stderr)
+        print(f"\n[ERROR] {error_msg}", file=sys.stderr)
+        # Write error.log
+        error_file = Path(__file__).parent / "error.log"
+        error_file.write_text(error_msg, encoding="utf-8")
+        print(f"錯誤已記錄至：{error_file}", file=sys.stderr)
 
 
 if __name__ == "__main__":
