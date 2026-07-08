@@ -120,3 +120,27 @@ Thank you!
 
 **[Patreon](http://patreon.com/ntdev) | [PayPal](http://paypal.me/ntdev2) | [Ko-fi](http://ko-fi.com/ntdev)**
 Thanks for trying it and let me know how you like it!
+
+---
+
+## 🖥️ GUI (Graphical Interface)
+
+A CustomTkinter-based GUI is available in the `gui/` folder for easier configuration and building.
+
+### Quick Start (Windows)
+1. Install [Python 3.8+](https://python.org)
+2. Double-click `gui/launch.bat` — it auto-installs dependencies
+3. Configure your build in the GUI and click "以管理員執行"
+
+### Manual Start
+```powershell
+cd gui
+pip install -r requirements.txt
+python main.py
+```
+
+### Features
+- 📦 **包管理** — 勾選式選擇要移除的應用
+- ⚙️ **調整面板** — 開關式控制註冊表調整
+- 🔄 **上游同步** — 一鍵拉取上游更新
+- 🚀 **一鍵構建** — 以管理員權限執行，自動傳遞參數
