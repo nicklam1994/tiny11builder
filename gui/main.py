@@ -633,7 +633,7 @@ class App(ctk.CTk):
         # Pages
         self.pages: dict[str, ctk.CTkFrame] = {}
         self._build_pages()
-        self._show_page("home")
+        self.sidebar._select("home")
 
     def _build_pages(self):
         self.pages["home"] = HomePage(self)
@@ -646,7 +646,6 @@ class App(ctk.CTk):
         for page in self.pages.values():
             page.grid_forget()
         self.pages[name].grid(row=0, column=1, sticky="nsew", padx=5, pady=5)
-        self.sidebar._select(name)
 
 
 def main():
