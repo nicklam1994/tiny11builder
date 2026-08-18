@@ -5,6 +5,8 @@ import subprocess
 from pathlib import Path
 from dataclasses import dataclass
 
+UPSTREAM_URL = "https://github.com/ntdevlabs/tiny11builder.git"
+
 
 @dataclass
 class GitStatus:
@@ -15,6 +17,19 @@ class GitStatus:
     has_upstream: bool
 
 
+def _ensure_upstream(repo_dir: Path) -> bool:
+    """Ensure upstream remote exists. Auto-add if missing. Returns True if upstream is available."""
+    r = subprocess.run(["git", "remote"], cwd=repo_dir, capture_output=True, text=True)
+    if "upstream" in r.stdout:
+        return True
+    # Auto-add upstream
+    r = subprocess.run(
+        ["git", "remote", "add", "upstream", UPSTREAM_URL],
+        cwd=repo_dir, capture_output=True, text=True
+    )
+    return r.returncode == 0
+
+
 def get_status(repo_dir: Path) -> GitStatus:
     """Get git status of the repo."""
     def run(cmd: list[str]) -> str:
@@ -23,9 +38,8 @@ def get_status(repo_dir: Path) -> GitStatus:
     
     branch = run(["git", "rev-parse", "--abbrev-ref", "HEAD"])
     
-    # Check if upstream remote exists
-    remotes = run(["git", "remote"])
-    has_upstream = "upstream" in remotes
+    # Ensure upstream exists
+    has_upstream = _ensure_upstream(repo_dir)
     
     ahead = behind = 0
     if has_upstream:
@@ -47,6 +61,10 @@ def get_status(repo_dir: Path) -> GitStatus:
 def pull_upstream(repo_dir: Path) -> tuple[bool, str]:
     """Pull from upstream/main. Returns (success, message)."""
     try:
+        # Ensure upstream exists
+        if not _ensure_upstream(repo_dir):
+            return False, "Failed to add upstream remote"
+        
         # Fetch
         r = subprocess.run(
             ["git", "fetch", "upstream"],
